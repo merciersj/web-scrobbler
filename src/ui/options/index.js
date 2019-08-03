@@ -10,14 +10,25 @@ import 'ui/i18n';
 
 require([
 	'webextension-polyfill',
-	'ui/options/accounts',
-	'ui/options/connectors',
-	'ui/options/dialogs',
-	'ui/options/edited-tracks',
-	'ui/options/options',
-	// 'util/util-browser',
-],
-(browser, Accounts, Connectors, Dialogs, EditedTracks, Options /* , Util */) => {
+	'options/accounts',
+	'options/connectors',
+	'options/dialogs',
+	'options/edited-tracks',
+	'options/options',
+	'util/util-browser',
+	'options/storage.presenter',
+	'options/storage.view',
+], (
+	browser,
+	Accounts,
+	Connectors,
+	Dialogs,
+	EditedTracks,
+	Options,
+	Util,
+	StoragePresenter,
+	StorageView
+) => {
 	const GITHUB_RELEASES_URL =
 		'https://github.com/web-scrobbler/web-scrobbler/releases/tag';
 	// const GITHUB_RAW_SRC =
@@ -37,6 +48,8 @@ require([
 			EditedTracks.initialize(),
 			Options.initialize(),
 		]);
+
+		new StorageViewImpl();
 
 		updateSections();
 		updateUrls();
@@ -83,6 +96,13 @@ require([
 		const tabElement = document.getElementById(tabId);
 		new bootstrap.Tab(tabElement).show();
 	}
+
+	class StorageViewImpl extends StorageView {
+		getPresenter() {
+			return new StoragePresenter(this);
+		}
+	}
+
 
 	initialize();
 });

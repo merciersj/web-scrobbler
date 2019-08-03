@@ -168,6 +168,19 @@
     "description": "Popup hint"
   },
 
+  "scrobbleStorageTitle": {
+    "message": "Scrobble storage",
+    "description": "Scrobble storage header"
+  },
+  "scrobbleStorageDescDefault": {
+    "message": "Here you can view, edit, scrobble or remove all of tracks were not scrobbled.",
+    "description": "Scrobble storage description when at least one song is saved"
+  },
+  "scrobbleStorageDescNoSongs": {
+    "message": "You have no unscrobbled tracks.",
+    "description": "Scrobble storage description when no songs are saved"
+  },
+
   "learnMoreLabel": {
     "message": "Learn more",
     "description": "Learn more label"

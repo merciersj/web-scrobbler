@@ -38,6 +38,10 @@ h5 {
 	border-radius: 6px;
 }
 
+.badge-primary {
+	background-color: #d51007;
+}
+
 .btn-primary {
 	background-color: var(--color-accent);
 	border-color: rgba(27, 31, 35, 0.15);
