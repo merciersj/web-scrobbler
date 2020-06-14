@@ -38,11 +38,6 @@ require([
 		makeInfoPopup() {
 			return new InfoPopupImpl(this);
 		}
-
-		/** @override */
-		i18n(messageId, ...placeholders) {
-			return browser.i18n.getMessage(messageId, placeholders) || messageId;
-		}
 	}
 
 	/** Helpers */
