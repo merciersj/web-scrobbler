@@ -23,6 +23,7 @@ function localizeDocument() {
 
 	// Localize dynamic nodes
 	new MutationObserver(onDocumentChange).observe(document.body, {
+		attributes: true,
 		childList: true,
 		subtree: true,
 	});
@@ -35,6 +36,10 @@ function localizeDocument() {
  */
 function onDocumentChange(mutations) {
 	for (const mutation of mutations) {
+		if (i18nAttrs.includes(mutation.attributeName)) {
+			localizeNodeRecursively(mutation.target);
+		}
+
 		for (const node of mutation.addedNodes) {
 			localizeNodeRecursively(node);
 		}
