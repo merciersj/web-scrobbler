@@ -11,6 +11,13 @@
  * @type {Array}
  */
 const i18nAttrs = ['data-i18n', 'data-i18n-title', 'data-i18n-placeholder'];
+const i18nArgumentAttrs = [
+	'data-i18n-arg',
+	'data-i18n-title-arg',
+	'data-i18n-placeholder-arg',
+];
+
+const maxArgumentsCount = 9;
 
 const domParser = new DOMParser();
 
@@ -36,12 +43,31 @@ function localizeDocument() {
  */
 function onDocumentChange(mutations) {
 	for (const mutation of mutations) {
-		if (i18nAttrs.includes(mutation.attributeName)) {
-			localizeNodeRecursively(mutation.target);
-		}
+		switch (mutation.type) {
+			case 'attributes': {
+				const { attributeName, target } = mutation;
 
-		for (const node of mutation.addedNodes) {
-			localizeNodeRecursively(node);
+				let isI18nArgumentChanged = i18nAttrs.includes(attributeName);
+				if (!isI18nArgumentChanged) {
+					for (const i18nAttribute of i18nArgumentAttrs) {
+						if (attributeName.startsWith(i18nAttribute)) {
+							isI18nArgumentChanged = true;
+						}
+					}
+				}
+
+				if (isI18nArgumentChanged) {
+					localizeNodeRecursively(target);
+				}
+
+				break;
+			}
+
+			case 'childList': {
+				for (const node of mutation.addedNodes) {
+					localizeNodeRecursively(node);
+				}
+			}
 		}
 	}
 }
@@ -61,7 +87,8 @@ function localizeElement(element) {
 		}
 
 		const tag = element.getAttribute(attr);
-		const text = chrome.i18n.getMessage(tag) || tag;
+		const args = getArgumentsFromElement(element, attr);
+		const text = chrome.i18n.getMessage(tag, args) || tag;
 
 		switch (attr) {
 			case 'data-i18n':
@@ -89,6 +116,30 @@ function localizeElement(element) {
 				break;
 		}
 	}
+}
+
+/**
+ * Return a list of placeholder arguments from a given element.
+ *
+ * @param {Element} element Element
+ * @param {String} i18nAttr I18n attribute
+ * @return {Array} List of placeholder arguments
+ */
+function getArgumentsFromElement(element, i18nAttr) {
+	const i18nAruments = [];
+
+	for (let i = 0; i < maxArgumentsCount; i++) {
+		const attributeName = `${i18nAttr}-arg${i}`;
+		const attributeValue = element.getAttribute(attributeName);
+
+		if (!attributeValue) {
+			break;
+		}
+
+		i18nAruments.push(attributeValue);
+	}
+
+	return i18nAruments;
 }
 
 /**
