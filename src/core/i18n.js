@@ -10,7 +10,7 @@
  *
  * @type {Array}
  */
-const I18N_ATTRS = ['data-i18n', 'data-i18n-title', 'data-i18n-placeholder'];
+const i18nAttrs = ['data-i18n', 'data-i18n-title', 'data-i18n-placeholder'];
 
 const domParser = new DOMParser();
 
@@ -19,20 +19,26 @@ const domParser = new DOMParser();
  */
 function localizeDocument() {
 	// Localize static nodes
-	localizeElementChilds(document);
+	localizeNodeRecursively(document);
 
 	// Localize dynamic nodes
-	new MutationObserver((mutations) => {
-		for (const mutation of mutations) {
-			for (const node of mutation.addedNodes) {
-				localizeElement(node);
-				localizeElementChilds(node);
-			}
-		}
-	}).observe(document.body, {
+	new MutationObserver(onDocumentChange).observe(document.body, {
 		childList: true,
 		subtree: true,
 	});
+}
+
+/**
+ * Called when document is changed.
+ *
+ * @param  {Array} mutations Array of MutationRecords
+ */
+function onDocumentChange(mutations) {
+	for (const mutation of mutations) {
+		for (const node of mutation.addedNodes) {
+			localizeNodeRecursively(node);
+		}
+	}
 }
 
 /**
@@ -44,7 +50,7 @@ function localizeElement(element) {
 		return;
 	}
 
-	for (const attr of I18N_ATTRS) {
+	for (const attr of i18nAttrs) {
 		if (!element.hasAttribute(attr)) {
 			continue;
 		}
@@ -81,15 +87,17 @@ function localizeElement(element) {
 }
 
 /**
- * Localize children of given element.
- * @param  {Object} element Element to localize
+ * Localize a given node and its children.
+ * @param  {Object} node Node to localize
  */
-function localizeElementChilds(element) {
-	switch (element.nodeType) {
+function localizeNodeRecursively(node) {
+	localizeElement(node);
+
+	switch (node.nodeType) {
 		case Node.ELEMENT_NODE:
 		case Node.DOCUMENT_NODE:
-			for (const attr of I18N_ATTRS) {
-				const nodes = element.querySelectorAll(`[${attr}]`);
+			for (const attr of i18nAttrs) {
+				const nodes = node.querySelectorAll(`[${attr}]`);
 				nodes.forEach(localizeElement);
 			}
 			break;
