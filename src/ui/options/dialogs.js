@@ -1,7 +1,6 @@
 'use strict';
 
 define((require) => {
-	const browser = require('webextension-polyfill');
 	const SavedEdits = require('storage/saved-edits');
 	const CustomPatterns = require('storage/custom-patterns');
 
@@ -112,11 +111,10 @@ define((require) => {
 	}
 
 	async function updateViewEditedDialogTitle(cacheSize) {
-		const title = browser.i18n.getMessage(
-			'optionsEditedTracksPopupTitle', cacheSize.toString());
-
 		const modal = document.getElementById(editedModalId);
-		modal.querySelector('.modal-title').textContent = title;
+		modal
+			.querySelector('.modal-title')
+			.setAttribute('data-i18n-arg0', cacheSize.toString());
 	}
 
 	function savePatterns() {
@@ -185,8 +183,8 @@ define((require) => {
 		removeBtn.classList.add('close', 'close-btn');
 
 		if (album) {
-			const title = browser.i18n.getMessage('albumTooltip', album);
-			liItem.setAttribute('title', title);
+			liItem.setAttribute('data-i18n-title', 'albumTooltip');
+			liItem.setAttribute('data-i18n-title-arg0', album);
 		}
 
 		liItem.append(removeBtn);

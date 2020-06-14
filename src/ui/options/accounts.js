@@ -7,7 +7,7 @@ const propsModalOkBtnId = 'scrobbler-ok';
 
 define((require) => {
 	const { getCurrentTab } = require('util/util-browser');
-	const { extension, i18n, tabs } = require('webextension-polyfill');
+	const { extension, tabs } = require('webextension-polyfill');
 
 	const { webScrobbler } = extension.getBackgroundPage();
 	const ScrobbleService = webScrobbler.getScrobbleService();
@@ -84,11 +84,11 @@ define((require) => {
 
 		if (session) {
 			const userName = session.sessionName || 'anonimous';
-			const authText = i18n.getMessage('accountsSignedInAs', userName);
 
-			authStr.textContent = authText;
+			authStr.setAttribute('data-i18n', 'accountsSignedInAs');
+			authStr.setAttribute('data-i18n-arg0', userName);
 		} else {
-			authStr.textContent = i18n.getMessage('accountsNotSignedIn');
+			authStr.setAttribute('data-i18n', 'accountsNotSignedIn');
 		}
 
 		if (!session) {
@@ -153,8 +153,9 @@ define((require) => {
 			}));
 		}
 
-		title.textContent = i18n.getMessage(
-			'accountsScrobblerPropsTitle', scrobblerLabel);
+		title.setAttribute('data-i18n', 'accountsSignedInAs');
+		title.setAttribute('data-i18n-arg0', scrobblerLabel);
+
 		modal.setAttribute('data-scrobbler-id', scrobblerId);
 	}
 

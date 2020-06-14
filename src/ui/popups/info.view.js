@@ -57,10 +57,6 @@ class InfoPopupView {
 		throw new Error('No implementation!');
 	}
 
-	i18n(/* messageId, ...placeholders */) {
-		throw new Error('No implementation!');
-	}
-
 	/** Basic functions */
 
 	getInfoPopup() {
@@ -111,7 +107,8 @@ class InfoPopupView {
 			loveButon.classList.add('unloved');
 		}
 
-		loveButon.setAttribute('title', this.i18n(isLoved ? 'infoUnlove' : 'infoLove'));
+		const btnTitleId = isLoved ? 'infoUnlove' : 'infoLove';
+		loveButon.setAttribute('data-i18n-title', btnTitleId);
 	}
 
 	setUserPlayCount(playCount) {
@@ -120,7 +117,8 @@ class InfoPopupView {
 
 		if (playCount) {
 			playCountContainer.hidden = false;
-			playCountContainer.setAttribute('title', this.i18n('infoYourScrobbles', playCount));
+			playCountContainer.setAttribute('data-i18n-title', 'infoYourScrobbles');
+			playCountContainer.setAttribute('data-i18n-title-arg0', playCount);
 
 			playCountLabel.textContent = playCount.toString();
 		} else {
@@ -221,7 +219,7 @@ class InfoPopupView {
 
 		const fieldElement = document.getElementById(fieldId);
 		fieldElement.setAttribute('href', url);
-		fieldElement.setAttribute('title', this.i18n(fieldTitleId));
+		fieldElement.setAttribute('data-i18n-title', fieldTitleId);
 	}
 
 	removeFieldUrl(field) {
@@ -279,8 +277,7 @@ class InfoPopupView {
 	}
 
 	setButtonTitle(buttonId, titleId) {
-		const title = this.i18n(titleId);
-		document.getElementById(buttonId).setAttribute('title', title);
+		document.getElementById(buttonId).setAttribute('data-i18n-title', titleId);
 	}
 
 	setButtonState(selector, state, enabledTitleId, disabledTitleId) {
