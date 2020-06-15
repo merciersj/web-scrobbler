@@ -2,6 +2,8 @@
 
 require('dotenv').config();
 
+const getWebpackConfig = require('./webpack.config.js');
+
 const CHROME_EXTENSION_ID = 'hhinaapppaileiechjoiifaancjggfjm';
 const FIREFOX_EXTENSION_ID = '{799c0914-748b-41df-a25c-22d008f9e83f}';
 
@@ -12,24 +14,7 @@ const DIST_FILE_CHROME = 'web-scrobbler-chrome.zip';
 const DIST_FILE_FIREFOX = 'web-scrobbler-firefox.zip';
 const MANIFEST_FILE = 'src/manifest.json';
 
-const FILES_TO_PREPROCESS = [
-	`${BUILD_DIR}/**/*.js`, `${BUILD_DIR}/**/*.css`, `${BUILD_DIR}/**/*.html`,
-];
-
 const FILES_TO_BUMP = [MANIFEST_FILE, 'package.json', 'package-lock.json'];
-
-// Files to build zipball
-const EXTENSION_SRC = [
-	'**/*',
-	// Skip SVG
-	'!icons/*.svg',
-];
-const EXTENSION_DOCS = [
-	'README.md', 'LICENSE.md',
-];
-const EXTENSION_EXTRA = [
-	'package.json', 'package-lock.json',
-];
 
 // Files to lint
 const JS_FILES = [
@@ -72,24 +57,6 @@ module.exports = (grunt) => {
 				`${BUILD_DIR}/icons/icon_chrome_*.png`,
 			],
 		},
-		copy: {
-			source_files: {
-				expand: true,
-				cwd: SRC_DIR,
-				src: EXTENSION_SRC,
-				dest: BUILD_DIR,
-			},
-			documentation: {
-				expand: true,
-				src: EXTENSION_DOCS,
-				dest: BUILD_DIR,
-			},
-			extra_files: {
-				expand: true,
-				src: EXTENSION_EXTRA,
-				dest: BUILD_DIR,
-			},
-		},
 		compress: {
 			chrome: {
 				options: {
@@ -120,16 +87,6 @@ module.exports = (grunt) => {
 				}],
 			},
 		},
-		preprocess: {
-			main: {
-				src: FILES_TO_PREPROCESS,
-				expand: true,
-				options: {
-					inline: true,
-					context: { /* generated */ },
-				},
-			},
-		},
 		replace_json: {
 			chrome: {
 				src: `${BUILD_DIR}/manifest.json`,
@@ -155,6 +112,10 @@ module.exports = (grunt) => {
 					options_page: undefined,
 				},
 			},
+		},
+		webpack: {
+			chrome: () => getWebpackConfig('chrome'),
+			firefox: () => getWebpackConfig('firefox'),
 		},
 
 		/**
@@ -276,20 +237,9 @@ module.exports = (grunt) => {
 		assertBrowserIsSupported(browser);
 		assertDevelopmentModeIsValid(mode);
 
-		const flags = {
-			chrome: 'CHROME', firefox: 'FIREFOX',
-			debug: 'DEBUG', release: 'RELEASE',
-		};
-
-		const config = grunt.config.get('preprocess');
-		config.main.options.context = {
-			[flags[browser]]: true, [flags[mode]]: true,
-		};
-		grunt.config.set('preprocess', config);
-
 		grunt.task.run([
-			'copy',
-			'preprocess',
+			`webpack:${browser}`,
+			`clean:${browser}`,
 			`replace_json:${browser}`,
 		]);
 	});

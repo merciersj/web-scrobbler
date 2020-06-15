@@ -181,4 +181,4 @@ function hasHtmlTags(text) {
 	return /<.+?>/.test(text);
 }
 
-document.addEventListener('DOMContentLoaded', localizeDocument);
+localizeDocument();

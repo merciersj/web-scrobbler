@@ -1,16 +1,23 @@
 'use strict';
 
+import 'bootstrap/dist/css/bootstrap.css';
+import * as bootstrap from 'bootstrap/dist/js/bootstrap.bundle.js';
+
+import 'ui/base.css';
+import 'ui/options/index.css';
+
+import 'ui/i18n';
+
 require([
 	'webextension-polyfill',
-	'options/accounts',
-	'options/connectors',
-	'options/dialogs',
-	'options/edited-tracks',
-	'options/options',
-	'util/util-browser',
-	'bootstrap',
+	'ui/options/accounts',
+	'ui/options/connectors',
+	'ui/options/dialogs',
+	'ui/options/edited-tracks',
+	'ui/options/options',
+	// 'util/util-browser',
 ],
-(browser, Accounts, Connectors, Dialogs, EditedTracks, Options, Util, bootstrap) => {
+(browser, Accounts, Connectors, Dialogs, EditedTracks, Options /* , Util */) => {
 	const GITHUB_RELEASES_URL =
 		'https://github.com/web-scrobbler/web-scrobbler/releases/tag';
 	// const GITHUB_RAW_SRC =
