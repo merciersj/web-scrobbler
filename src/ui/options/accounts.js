@@ -55,9 +55,9 @@ define((require) => {
 			return;
 		}
 
-		const accountContainer = document.createElement('li');
+		const accountContainer = document.createElement('div');
 		accountContainer.id = containerId;
-		accountContainer.classList.add('list-group-item');
+		accountContainer.classList.add('options-section');
 
 		const accountsList = document.getElementById('accounts-wrapper');
 		accountsList.append(accountContainer);
@@ -73,8 +73,7 @@ define((require) => {
 			// Do nothing
 		}
 
-		const label = document.createElement('h4');
-		label.classList.add('cart-title');
+		const label = document.createElement('h5');
 		label.textContent = scrobbler.getLabel();
 
 		const buttons = document.createElement('div');
@@ -153,15 +152,14 @@ define((require) => {
 			}));
 		}
 
-		title.setAttribute('data-i18n', 'accountsSignedInAs');
 		title.setAttribute('data-i18n-arg0', scrobblerLabel);
 
 		modal.setAttribute('data-scrobbler-id', scrobblerId);
 	}
 
 	function setupDialog() {
-		// const modalDialog = document.getElementById(propsModalId);
-		$('#scrobbler-props').on('show.bs.modal', (event) => {
+		const modalDialog = document.getElementById(propsModalId);
+		modalDialog.addEventListener('show.bs.modal', (event) => {
 			const button = event.relatedTarget;
 			const scrobblerId = button.getAttribute('data-scrobbler-id');
 
@@ -203,9 +201,10 @@ define((require) => {
 		const { propId, placeholder, title, type, value } = prop;
 
 		const formGroup = document.createElement('div');
-		formGroup.className = 'form-group';
+		formGroup.className = 'mb-3';
 
 		const label = document.createElement('label');
+		label.className = 'form-label';
 		label.setAttribute('data-i18n', title);
 
 		const input = document.createElement('input');

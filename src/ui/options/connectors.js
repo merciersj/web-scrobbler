@@ -49,8 +49,8 @@ define((require) => {
 	function createConnectorEntry(index, label) {
 		const configId = getConnectorConfigId(index);
 
-		const icon = document.createElement('i');
-		icon.classList.add('fa', 'fa-cog');
+		const icon = document.createElement('div');
+		icon.classList.add('connector-icon');
 
 		const configLink = document.createElement('a');
 		configLink.setAttribute('href', '#conn-conf-modal');
@@ -59,6 +59,7 @@ define((require) => {
 		configLink.append(icon);
 
 		const configCheckBox = document.createElement('input');
+		configCheckBox.classList.add('form-check-input');
 		configCheckBox.setAttribute('type', 'checkbox');
 		configCheckBox.id = configId;
 
@@ -67,11 +68,15 @@ define((require) => {
 		configLabel.classList.add('form-check-label');
 		configLabel.textContent = label;
 
-		const container = document.createElement('div');
-		container.classList.add('connector-config');
-		container.append(configLink, configCheckBox, configLabel);
+		const checkBoxContainer = document.createElement('div');
+		checkBoxContainer.classList.add('form-check', 'form-switch');
+		checkBoxContainer.append(configCheckBox, configLabel);
 
-		return container;
+		const itemContainer = document.createElement('div');
+		itemContainer.classList.add('input-group', 'mb-2');
+		itemContainer.append(configLink, checkBoxContainer);
+
+		return itemContainer;
 	}
 
 	function getConnectorConfigId(index) {

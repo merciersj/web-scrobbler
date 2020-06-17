@@ -1,7 +1,6 @@
 'use strict';
 
 define((require) => {
-	const SavedEdits = require('storage/saved-edits');
 	const CustomPatterns = require('storage/custom-patterns');
 
 	const { getSortedConnectors } = require('util/util-connector');
@@ -16,18 +15,13 @@ define((require) => {
 	const patternsModalId = 'conn-conf-modal';
 	const patternsModalTitleId = 'url-patterns-title';
 
-	const editedModalId = 'edited-track-modal';
-	const editedModalListId = 'edited-track-content';
-	const editedModalClearBtnId = 'clear-cache';
-
 	function initialize() {
 		initAddPatternDialog();
-		initViewEditedDialog();
 	}
 
 	function initAddPatternDialog() {
-		// const modalDialog = document.getElementById(patternsModalId);
-		$('#conn-conf-modal').on('show.bs.modal', (event) => {
+		const modalDialog = document.getElementById(patternsModalId);
+		modalDialog.addEventListener('show.bs.modal', (event) => {
 			const button = event.relatedTarget;
 			const connectorIndex = button.getAttribute('data-conn');
 
@@ -42,18 +36,6 @@ define((require) => {
 
 		const resetButton = document.getElementById(patternsModalResetBtnId);
 		resetButton.addEventListener('click', resetPatterns);
-	}
-
-	function initViewEditedDialog() {
-		// const modalDialog = document.getElementById(patternsModalId);
-		$('#edited-track-modal').on('show.bs.modal', () => {
-			fillViewEditedDialog();
-		});
-
-		const clearButton = document.getElementById(editedModalClearBtnId);
-		clearButton.addEventListener('click', () => {
-			clearLocalCache();
-		});
 	}
 
 	async function initPatternsList(index) {
@@ -74,47 +56,6 @@ define((require) => {
 		for (const value of patterns) {
 			patternsList.append(createNewInputContainer(value));
 		}
-	}
-
-	async function fillViewEditedDialog() {
-		// const modal = document.getElementById(editedModalId);
-		const cacheDom = document.getElementById(editedModalListId);
-		cacheDom.innerHTML = '';
-
-		const data = await SavedEdits.getSongInfoStorage();
-		const cacheSize = Object.keys(data).length;
-
-		if (cacheSize === 0) {
-			cacheDom.append(createNoEditedLabel());
-		} else {
-			for (const songId in data) {
-				const { artist, track, album } = data[songId];
-				const liItem = createTrackItem(artist, track, album);
-
-				const removeButton = liItem.getElementsByTagName('button')[0];
-				removeButton.addEventListener('click', async () => {
-					await SavedEdits.removeSongInfoById(songId);
-
-					const cacheSize = Object.keys(data).length;
-
-					if (cacheSize === 0) {
-						cacheDom.append(createNoEditedLabel());
-					}
-					updateViewEditedDialogTitle(cacheSize);
-				});
-
-				cacheDom.append(liItem);
-			}
-		}
-
-		updateViewEditedDialogTitle(cacheSize);
-	}
-
-	async function updateViewEditedDialogTitle(cacheSize) {
-		const modal = document.getElementById(editedModalId);
-		modal
-			.querySelector('.modal-title')
-			.setAttribute('data-i18n-arg0', cacheSize.toString());
 	}
 
 	function savePatterns() {
@@ -163,38 +104,16 @@ define((require) => {
 		input.value = value || '';
 
 		const closeButton = createCloseButton(container);
-		closeButton.classList.add('btn', 'btn-outline-secondary');
-
-		const inputAppend = document.createElement('div');
-		inputAppend.classList.add('input-group-append');
-		inputAppend.append(closeButton);
 
 		container.classList.add('input-group');
-		container.append(input, inputAppend);
+		container.append(input, closeButton);
 
 		return container;
 	}
 
-	function createTrackItem(artist, track, album) {
-		const liItem = document.createElement('li');
-		liItem.textContent = `${artist} — ${track}`;
-
-		const removeBtn = createCloseButton(liItem);
-		removeBtn.classList.add('close', 'close-btn');
-
-		if (album) {
-			liItem.setAttribute('data-i18n-title', 'albumTooltip');
-			liItem.setAttribute('data-i18n-title-arg0', album);
-		}
-
-		liItem.append(removeBtn);
-
-		return liItem;
-	}
-
 	function createCloseButton(parent) {
 		const closeButton = document.createElement('button');
-		closeButton.setAttribute('type', 'button');
+		closeButton.classList.add('btn', 'btn-outline-secondary');
 		closeButton.innerHTML = '&times;';
 		closeButton.addEventListener('click', () => {
 			parent.remove();
@@ -203,20 +122,9 @@ define((require) => {
 		return closeButton;
 	}
 
-	function createNoEditedLabel() {
-		const label = document.createElement('li');
-		label.setAttribute('data-i18n', 'noItemsInCache');
-
-		return label;
-	}
-
 	function getConnectorAttachedTo(modalDialog) {
 		const index = modalDialog.getAttribute('data-conn');
 		return sortedConnectors[index];
-	}
-
-	function clearLocalCache() {
-		SavedEdits.clear();
 	}
 
 	return { initialize };

@@ -4,7 +4,7 @@ define((require) => {
 	const Options = require('storage/options');
 
 	const hiddenOptionsId = 'hidden-options';
-	const optionsContainerId = 'collapseOptions';
+	const optionsContainerId = 'sidebar-options';
 	const scrobblePercentId = 'scrobblePercent';
 
 	const percentValues = [
