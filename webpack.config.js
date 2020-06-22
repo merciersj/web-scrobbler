@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 
 /**
@@ -37,7 +38,7 @@ const uiPopups = getUiPopupNames();
  *
  * @type {Array}
  */
-const uiPages = ['options', 'startup'];
+const uiPages = ['options', 'startup', 'vue'];
 
 /**
  * A default chunk for UI popups with no chunk.
@@ -48,6 +49,7 @@ const defaultPopupChunk = 'ui/popups/base-popup';
 
 const chunkDir = 'shared';
 const buildDir = 'build';
+const iconsDir = 'icons';
 const srcDir = 'src';
 const vendorDir = 'vendor';
 
@@ -55,9 +57,15 @@ const vendorFiles = ['metadata-filter/dist/filter.js'];
 const extensionFiles = [
 	'manifest.json',
 	'_locales/',
+
 	'connectors/',
-	'icons/',
 	'core/content/',
+];
+const extensionIcons = [
+	`${srcDir}/${iconsDir}/`,
+	'node_modules/bootstrap-icons/icons/',
+	'node_modules/simple-icons/icons/github.svg',
+	'node_modules/simple-icons/icons/twitter.svg',
 ];
 const projectFiles = [
 	'LICENSE.md',
@@ -139,6 +147,10 @@ module.exports = (browserArg) => {
 						options: preprocessorFlags,
 					},
 				},
+				{
+					test: /\.vue$/,
+					loader: 'vue-loader',
+				},
 			],
 		},
 		optimization: makeOptimization(),
@@ -159,6 +171,7 @@ module.exports = (browserArg) => {
 				'node_modules',
 			],
 		},
+		stats: 'minimal',
 	};
 };
 
@@ -373,6 +386,12 @@ function makePlugins() {
 				to: resolve(`${buildDir}/${path}`),
 			};
 		}),
+		...extensionIcons.map((path) => {
+			return {
+				from: resolve(path),
+				to: resolve(`${buildDir}/${iconsDir}`),
+			};
+		}),
 		...projectFiles.map((path) => {
 			return {
 				from: resolve(path),
@@ -382,6 +401,7 @@ function makePlugins() {
 	];
 
 	return [
+		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
 			chunkFilename: `${chunkDir}/[name].css`,
 			filename: '[name].css',

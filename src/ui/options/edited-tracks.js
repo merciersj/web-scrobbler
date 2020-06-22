@@ -2,7 +2,7 @@
 
 define((require) => {
 	const SavedEdits = require('storage/saved-edits');
-	const { exportData, importData } = require('options/util');
+	const { exportData, importData } = require('ui/options/util');
 
 	const EXPORT_FILENAME = 'local-cache.json';
 
