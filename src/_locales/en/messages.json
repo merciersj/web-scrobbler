@@ -290,6 +290,22 @@
     "message": "You can find the list of contributors <a href=\"https://github.com/web-scrobbler/web-scrobbler/graphs/contributors\">right on the GitHub</a>",
     "description": "Section name text"
   },
+  "aboutLinksTitle": {
+    "message": "Links",
+    "description": "Section name"
+  },
+  "aboutReleaseNotesTitle": {
+    "message": "Release notes",
+    "description": "Section name"
+  },
+  "aboutFullChangelogTitle": {
+    "message": "Full changelog",
+    "description": "Section name"
+  },
+  "aboutPrivacyPolicyTitle": {
+    "message": "Privacy policy",
+    "description": "Section name"
+  },
   "aboutShowSomeLoveTitle": {
     "message": "Show some love",
     "description": "Section name"
@@ -619,6 +635,10 @@
   "buttonReset": {
     "message": "Reset",
     "description": "Reset button label"
+  },
+  "buttonRemove": {
+    "message": "Remove",
+    "description": "Button name"
   },
   "buttonClear": {
     "message": "Clear",
