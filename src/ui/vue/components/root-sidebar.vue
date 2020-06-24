@@ -48,6 +48,21 @@
 			</a>
 			<a
 				class="nav-link"
+				id="sidebar-storage-tab"
+				data-toggle="pill"
+				href="#sidebar-storage"
+				role="tab"
+				aria-controls="sidebar-storage"
+				aria-selected="false"
+			>
+				<inline-svg
+					src="/icons/music-note-list.svg"
+					fill="currentColor"
+				></inline-svg>
+				<span>{{ L('storageSidebarTitle') }}</span>
+			</a>
+			<a
+				class="nav-link"
 				id="sidebar-faq-tab"
 				data-toggle="pill"
 				href="#sidebar-faq"

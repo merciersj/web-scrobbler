@@ -450,7 +450,7 @@ define((require) => {
 		 * Add current song to scrobble storage if it's needed.
 		 */
 		async addUnknownSongToStorage() {
-			if (await this.isNeedToAddSongToScrobbleStorage()) {
+			if (this.isNeedToAddSongToScrobbleStorage()) {
 				const boundScrobblerIds = ScrobbleService.getBoundScrobblers().map(
 					(scrobbler) => scrobbler.getId()
 				);
@@ -473,9 +473,9 @@ define((require) => {
 		 *
 		 * @return {Boolean} Check result
 		 */
-		async isNeedToAddSongToScrobbleStorage() {
+		isNeedToAddSongToScrobbleStorage() {
 			if (this.currentSong && !this.currentSong.isValid()) {
-				const secondsToScrobble = await this.getSecondsToScrobble(
+				const secondsToScrobble = this.getSecondsToScrobble(
 					this.currentSong.getDuration()
 				);
 				if (secondsToScrobble !== -1) {

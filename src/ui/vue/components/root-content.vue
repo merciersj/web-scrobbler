@@ -3,6 +3,7 @@
 		<accounts-tab />
 		<options-tab />
 		<tracks-tab />
+		<storage-tab />
 		<faq-tab />
 		<about-tab />
 	</div>
@@ -24,6 +25,7 @@ import AccountsTab from './tabs/accounts-tab.vue';
 import FaqTab from './tabs/faq-tab.vue';
 import OptionsTab from './tabs/options-tab.vue';
 import TracksTab from './tabs/tracks-tab.vue';
+import StorageTab from './tabs/storage-tab.vue';
 
 export default {
 	components: {
@@ -32,6 +34,7 @@ export default {
 		FaqTab,
 		OptionsTab,
 		TracksTab,
+		StorageTab,
 	},
 };
 </script>

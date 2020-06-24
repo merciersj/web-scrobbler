@@ -1,84 +1,17 @@
 'use strict';
 
-define(() => {
-	class ScrobbleStorageModel {
+define((require) => {
+	const CustomStorage = require('storage/custom-storage');
+
+	class ScrobbleStorageModel extends CustomStorage {
 		/* Public methods */
 
 		async addSong(songInfo, scrobblerIds) {
-			const storageData = await this.getDataFromStorage();
+			const storageData = await this.getData();
 			const entryId = ScrobbleStorageModel.generateEntryId();
 
 			storageData[entryId] = { scrobblerIds, songInfo };
-			await this.saveDataToStorage(storageData);
-		}
-
-		async updateSong(entryId, songInfo) {
-			const storageData = await this.getDataFromStorage();
-
-			for (const key in songInfo) {
-				storageData[entryId].songInfo[key] = songInfo[key];
-			}
-
-			await this.saveDataToStorage(storageData);
-		}
-
-		async updateScrobblerIds(entryId, scrobblerIds) {
-			const storageData = await this.getDataFromStorage();
-
-			storageData[entryId].scrobblerIds = scrobblerIds;
-			await this.saveDataToStorage(storageData);
-		}
-
-		async getEntry(entryId) {
-			const storageData = await this.getDataFromStorage();
-			return storageData[entryId];
-		}
-
-		async getEntries() {
-			return await this.getDataFromStorage();
-		}
-
-		async removeEntry(entryId) {
-			const storageData = await this.getDataFromStorage();
-
-			delete storageData[entryId];
-			await this.saveDataToStorage(storageData);
-		}
-
-		/* Functions must be implemented */
-
-		/**
-		 * Remove all data from the storage.
-		 */
-		async clear() {
-			throw new Error('This function must be overridden!');
-		}
-
-		/**
-		 * Return data of the scrobble storage.
-		 *
-		 * @return {Object} Storage data
-		 */
-		async getDataFromStorage() {
-			throw new Error('This function must be overridden!');
-		}
-
-		/**
-		 * Return a number of songs stored in the storage.
-		 *
-		 * @return {Object} Storage data
-		 */
-		async getSongCount() {
-			throw new Error('This function must be overridden!');
-		}
-
-		/**
-		 * Save given data to the scrobble storage.
-		 *
-		 * @return {Object} Storage data
-		 */
-		async saveDataToStorage(/* data */) {
-			throw new Error('This function must be overridden!');
+			await this.saveData(storageData);
 		}
 
 		/* Static methods */

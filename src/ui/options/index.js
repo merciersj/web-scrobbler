@@ -10,14 +10,14 @@ import 'ui/i18n';
 
 require([
 	'webextension-polyfill',
-	'options/accounts',
-	'options/connectors',
-	'options/dialogs',
-	'options/edited-tracks',
-	'options/options',
+	'ui/options/accounts',
+	'ui/options/connectors',
+	'ui/options/dialogs',
+	'ui/options/edited-tracks',
+	'ui/options/options',
 	'util/util-browser',
-	'options/storage.presenter',
-	'options/storage.view',
+	'ui/options/storage.presenter',
+	'ui/options/storage.view',
 ], (
 	browser,
 	Accounts,
@@ -42,11 +42,11 @@ require([
 
 	async function initialize() {
 		await Promise.all([
-			Connectors.initialize(),
-			Accounts.initialize(),
-			Dialogs.initialize(),
-			EditedTracks.initialize(),
-			Options.initialize(),
+			// Connectors.initialize(),
+			// Accounts.initialize(),
+			// Dialogs.initialize(),
+			// EditedTracks.initialize(),
+			// Options.initialize(),
 		]);
 
 		new StorageViewImpl();

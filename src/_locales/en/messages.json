@@ -168,15 +168,23 @@
     "description": "Popup hint"
   },
 
-  "scrobbleStorageTitle": {
+  "storageSidebarTitle": {
+    "message": "Storage",
+    "description": "Section name"
+  },
+  "storageScrobbleStorageTitle": {
     "message": "Scrobble storage",
     "description": "Scrobble storage header"
   },
-  "scrobbleStorageDescDefault": {
+  "storageScrobbleStorageCount": {
+    "message": "$1 unscrobbled tracks",
+    "description": "Section name"
+  },
+  "storageScrobbleStorageDescDefault": {
     "message": "Here you can view, edit, scrobble or remove all of tracks were not scrobbled.",
     "description": "Scrobble storage description when at least one song is saved"
   },
-  "scrobbleStorageDescNoSongs": {
+  "storageScrobbleStorageDescNoSongs": {
     "message": "You have no unscrobbled tracks.",
     "description": "Scrobble storage description when no songs are saved"
   },
@@ -651,6 +659,14 @@
   },
   "buttonRemove": {
     "message": "Remove",
+    "description": "Button name"
+  },
+  "buttonEdit": {
+    "message": "Edit",
+    "description": "Button name"
+  },
+  "buttonScrobble": {
+    "message": "Scrobble",
     "description": "Button name"
   },
   "buttonClear": {
