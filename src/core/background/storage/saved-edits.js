@@ -22,13 +22,18 @@ define((require) => {
 		}
 
 		/** @override */
-		async getSongInfoStorage() {
+		async getDataFromStorage() {
 			return await this.songInfoStorage.get();
 		}
 
 		/** @override */
-		async saveSongInfoToStorage(data) {
+		async saveDataToStorage(data) {
 			return await this.songInfoStorage.set(data);
+		}
+
+		/** @override */
+		async updateDataInStorage(data) {
+			return await this.songInfoStorage.update(data);
 		}
 	}
 
