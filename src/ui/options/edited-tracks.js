@@ -2,6 +2,7 @@
 
 define((require) => {
 	const SavedEdits = require('storage/saved-edits');
+	const { exportData, importData } = require('options/util');
 
 	const EXPORT_FILENAME = 'local-cache.json';
 
@@ -28,70 +29,34 @@ define((require) => {
 
 		exportButton.addEventListener('click', (e) => {
 			e.preventDefault();
-			exportLocalCache();
+			exportEditedTracks();
 		});
 
 		importButton.addEventListener('click', (e) => {
 			e.preventDefault();
-			importLocalStorage();
+			importEditedTracks();
 		});
 
 		clearButton.addEventListener('click', (e) => {
 			e.preventDefault();
-			clearLocalCache();
+			clearEditedTracks();
 		});
 	}
 
 	/**
 	 * Export content of LocalCache storage to a file.
 	 */
-	async function exportLocalCache() {
+	async function exportEditedTracks() {
 		const data = await SavedEdits.getSongInfoStorage();
-		const dataStr = JSON.stringify(data, null, 2);
-		const blob = new Blob([dataStr], { type: 'application/octet-stream' });
-		const url = URL.createObjectURL(blob);
-
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = EXPORT_FILENAME;
-		a.dispatchEvent(new MouseEvent('click'));
-		a.remove();
-
-		URL.revokeObjectURL(url);
+		exportData(data, EXPORT_FILENAME);
 	}
 
 	/**
 	 * Import LocalCache storage from a file.
 	 */
-	function importLocalStorage() {
-		const fileInput = document.createElement('input');
-
-		fileInput.style.display = 'none';
-		fileInput.type = 'file';
-		fileInput.accept = '.json';
-		fileInput.acceptCharset = 'utf-8';
-
-		document.body.append(fileInput);
-		fileInput.initialValue = fileInput.value;
-		fileInput.addEventListener('change', readFile);
-		fileInput.click();
-
-		function readFile() {
-			if (fileInput.value !== fileInput.initialValue) {
-				const file = fileInput.files[0];
-
-				const reader = new FileReader();
-				reader.onloadend = (event) => {
-					const dataStr = event.target.result;
-					const data = JSON.parse(dataStr);
-
-					localCache.update(data).then(() => {
-						fileInput.remove();
-					});
-				};
-				reader.readAsText(file, 'utf-8');
-			}
-		}
+	async function importEditedTracks() {
+		const data = await importData();
+		await localCache.update(data);
 	}
 
 	async function initializeList() {
@@ -188,7 +153,7 @@ define((require) => {
 		return closeButton;
 	}
 
-	function clearLocalCache() {
+	function clearEditedTracks() {
 		SavedEdits.clear();
 	}
 
