@@ -37,12 +37,12 @@ function testNotImplementedMethods() {
 		return expect(savedEdits.clear()).to.eventually.be.rejected;
 	});
 
-	it('should throw an error for `getSongInfoStorage` method', () => {
-		return expect(savedEdits.getSongInfoStorage()).to.eventually.be.rejected;
+	it('should throw an error for `getData` method', () => {
+		return expect(savedEdits.getData()).to.eventually.be.rejected;
 	});
 
-	it('should throw an error for `saveSongInfoToStorage` method', async () => {
-		return expect(savedEdits.saveSongInfoToStorage()).to.eventually.be.rejected;
+	it('should throw an error for `saveData` method', async () => {
+		return expect(savedEdits.saveData()).to.eventually.be.rejected;
 	});
 }
 
@@ -210,7 +210,7 @@ function makeEmptySavedEdits() {
 function makeSavedEdits(...songs) {
 	const savedEdits = new SavedEditsMockImpl();
 	for (const song of songs) {
-		savedEdits.saveSongInfoToStorage(song);
+		savedEdits.saveData(song);
 	}
 	return savedEdits;
 }
@@ -228,12 +228,12 @@ class SavedEditsMockImpl extends SavedEditsModel {
 	}
 
 	/** @override */
-	async getSongInfoStorage() {
+	async getData() {
 		return this.songInfoStorage;
 	}
 
 	/** @override */
-	async saveSongInfoToStorage(data) {
+	async saveData(data) {
 		this.songInfoStorage = data;
 	}
 }

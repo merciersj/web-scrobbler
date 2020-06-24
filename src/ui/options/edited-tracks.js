@@ -12,10 +12,6 @@ define((require) => {
 	const importBtnId = 'import-edited';
 	const clearBtnId = 'clear-edited';
 
-	// FIXME Remove this
-	const BrowserStorage = require('storage/browser-storage');
-	const localCache = BrowserStorage.getStorage(BrowserStorage.LOCAL_CACHE);
-
 	function initialize() {
 		initializeList();
 
@@ -47,7 +43,7 @@ define((require) => {
 	 * Export content of LocalCache storage to a file.
 	 */
 	async function exportEditedTracks() {
-		const data = await SavedEdits.getSongInfoStorage();
+		const data = await SavedEdits.getData();
 		exportData(data, EXPORT_FILENAME);
 	}
 
@@ -56,7 +52,7 @@ define((require) => {
 	 */
 	async function importEditedTracks() {
 		const data = await importData();
-		await localCache.update(data);
+		await SavedEdits.updateData(data);
 	}
 
 	async function initializeList() {
@@ -65,7 +61,7 @@ define((require) => {
 		);
 		editedTracksContainer.innerHTML = '';
 
-		const data = await SavedEdits.getSongInfoStorage();
+		const data = await SavedEdits.getData();
 		const editedTracksCount = Object.keys(data).length;
 
 		if (editedTracksCount === 0) {
